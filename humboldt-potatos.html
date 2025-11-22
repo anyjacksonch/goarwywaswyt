@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Humboldt Potatos - AnyJackson</title>
+    <link rel="stylesheet" href="sentient.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="potato.ico">
+    
+    <style>
+        /* === 继承自首页的基础样式 === */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh; 
+            overflow-x: hidden;
+            color: black; 
+            
+            /* 保持背景一致 */
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), 
+                url('design/AtB-Image.jpg'); 
+            background-attachment: fixed; 
+            background-size: cover;       
+            background-position: center center;
+            background-repeat: no-repeat;
+            
+            padding-top: 240px; 
+        }
+
+        /* === 导航栏样式 (保持不变) === */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px 0;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.6); 
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: black;
+            font-size: 1rem;
+            text-transform: lowercase;
+            letter-spacing: 1px;
+            margin: 0 45px;
+            font-weight: normal;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: black;
+            transition: width 0.3s ease;
+        }
+
+        .navbar a:hover::after,
+        .navbar a.active::after { /* 增加 active 状态 */
+            width: 100%;
+        }
+
+        /* === 画廊容器样式 === */
+        .gallery-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 50px;
+        }
+
+        .page-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 1);
+        }
+
+        /* Grid 布局 */
+        .gallery-grid {
+            display: grid;
+            /* 自动填充列，每列最小250px，最大1fr */
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px; /* 图片间距 */
+        }
+
+        /* 图片容器 */
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            aspect-ratio: 1 / 1; /* 强制正方形裁剪，如不需要可删除此行 */
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02); /* 鼠标悬停轻微放大 */
+            z-index: 10;
+        }
+
+        /* 图片本身的样式与黑白效果 */
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 保持比例填充 */
+            display: block;
+            
+            /* 核心：黑白滤镜 */
+            filter: grayscale(100%);
+            transition: filter 0.5s ease; /* 0.5秒平滑过渡 */
+        }
+
+        /* 鼠标悬停时恢复彩色 */
+        .gallery-item:hover img {
+            filter: grayscale(0%);
+        }
+
+        /* === Lightbox (大图预览) 样式 === */
+        .modal {
+            display: none; /* 默认隐藏 */
+            position: fixed;
+            z-index: 2000;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9); /* 黑色半透明背景 */
+            backdrop-filter: blur(5px);
+        }
+
+        /* 模态框内容 (图片) */
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 85%;
+            max-height: 85vh;
+            object-fit: contain;
+            animation-name: zoom;
+            animation-duration: 0.4s;
+        }
+
+        @keyframes zoom {
+            from {transform:scale(0)} 
+            to {transform:scale(1)}
+        }
+
+        /* 关闭按钮 */
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 2001;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* 左右切换按钮 */
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -50px;
+            color: white;
+            font-weight: bold;
+            font-size: 30px;
+            transition: 0.3s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            z-index: 2001;
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        
+        .prev {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 767px) {
+            .navbar { flex-wrap: wrap; padding: 15px 0; }
+            .navbar a { font-size: 0.75rem; margin: 5px 12px; }
+            .modal-content { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index_homepage.html">home</a>
+        <a href="in-their-mouths.html">In their mouths</a>
+        <a href="humboldt-potatos.html" class="active">Humboldt potatos</a> <a href="inside-the-butcher.html">Butcher the butcher</a>
+        <a href="hometown.html">goarwywasyt</a>
+    </nav>
+
+    <div class="gallery-container" style="margin-bottom: 30px;">
+        <h1 class="page-title" >Humboldt Potatos</h1>
+
+        <div class="gallery-grid">
+            
+            <div class="gallery-item"><img src="imgpotatos/potatos (1).jpg" alt="Art piece 1" onclick="openModal();currentSlide(1)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (2).jpg" alt="Art piece 2" onclick="openModal();currentSlide(2)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (3).jpg" alt="Art piece 3" onclick="openModal();currentSlide(3)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (4).jpg" alt="Art piece 4" onclick="openModal();currentSlide(4)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (5).jpg" alt="Art piece 5" onclick="openModal();currentSlide(5)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (6).jpg" alt="Art piece 6" onclick="openModal();currentSlide(6)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (7).jpg" alt="Art piece 7" onclick="openModal();currentSlide(7)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (8).jpg" alt="Art piece 8" onclick="openModal();currentSlide(8)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (9).jpg" alt="Art piece 9" onclick="openModal();currentSlide(9)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (10).jpg" alt="Art piece 10" onclick="openModal();currentSlide(10)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (11).jpg" alt="Art piece 11" onclick="openModal();currentSlide(11)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (12).jpg" alt="Art piece 12" onclick="openModal();currentSlide(12)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (13).jpg" alt="Art piece 13" onclick="openModal();currentSlide(13)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (14).jpg" alt="Art piece 14" onclick="openModal();currentSlide(14)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (15).jpg" alt="Art piece 15" onclick="openModal();currentSlide(15)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (16).jpg" alt="Art piece 16" onclick="openModal();currentSlide(16)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (17).jpg" alt="Art piece 17" onclick="openModal();currentSlide(17)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (18).jpg" alt="Art piece 18" onclick="openModal();currentSlide(18)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (19).jpg" alt="Art piece 19" onclick="openModal();currentSlide(19)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (20).jpg" alt="Art piece 20" onclick="openModal();currentSlide(20)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (21).jpg" alt="Art piece 21" onclick="openModal();currentSlide(21)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (22).jpg" alt="Art piece 22" onclick="openModal();currentSlide(22)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (23).jpg" alt="Art piece 23" onclick="openModal();currentSlide(23)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (24).jpg" alt="Art piece 24" onclick="openModal();currentSlide(24)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (25).jpg" alt="Art piece 25" onclick="openModal();currentSlide(25)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (26).jpg" alt="Art piece 26" onclick="openModal();currentSlide(26)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (27).jpg" alt="Art piece 27" onclick="openModal();currentSlide(27)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (28).jpg" alt="Art piece 28" onclick="openModal();currentSlide(28)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (29).jpg" alt="Art piece 29" onclick="openModal();currentSlide(29)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (30).jpg" alt="Art piece 30" onclick="openModal();currentSlide(30)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (31).jpg" alt="Art piece 31" onclick="openModal();currentSlide(31)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (32).jpg" alt="Art piece 32" onclick="openModal();currentSlide(32)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (33).jpg" alt="Art piece 33" onclick="openModal();currentSlide(33)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (34).jpg" alt="Art piece 34" onclick="openModal();currentSlide(34)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (35).jpg" alt="Art piece 35" onclick="openModal();currentSlide(35)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (36).jpg" alt="Art piece 36" onclick="openModal();currentSlide(36)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (37).jpg" alt="Art piece 37" onclick="openModal();currentSlide(37)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (38).jpg" alt="Art piece 38" onclick="openModal();currentSlide(38)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (39).jpg" alt="Art piece 39" onclick="openModal();currentSlide(39)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (40).jpg" alt="Art piece 40" onclick="openModal();currentSlide(40)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (41).jpg" alt="Art piece 41" onclick="openModal();currentSlide(41)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (42).jpg" alt="Art piece 42" onclick="openModal();currentSlide(42)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (43).jpg" alt="Art piece 43" onclick="openModal();currentSlide(43)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (44).jpg" alt="Art piece 44" onclick="openModal();currentSlide(44)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (45).jpg" alt="Art piece 45" onclick="openModal();currentSlide(45)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (46).jpg" alt="Art piece 46" onclick="openModal();currentSlide(46)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (47).jpg" alt="Art piece 47" onclick="openModal();currentSlide(47)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (48).jpg" alt="Art piece 48" onclick="openModal();currentSlide(48)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (49).jpg" alt="Art piece 49" onclick="openModal();currentSlide(49)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (50).jpg" alt="Art piece 50" onclick="openModal();currentSlide(50)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (51).jpg" alt="Art piece 51" onclick="openModal();currentSlide(51)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (52).jpg" alt="Art piece 52" onclick="openModal();currentSlide(52)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (53).jpg" alt="Art piece 53" onclick="openModal();currentSlide(53)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (54).jpg" alt="Art piece 54" onclick="openModal();currentSlide(54)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (55).jpg" alt="Art piece 55" onclick="openModal();currentSlide(55)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (56).jpg" alt="Art piece 56" onclick="openModal();currentSlide(56)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (57).jpg" alt="Art piece 57" onclick="openModal();currentSlide(57)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (58).jpg" alt="Art piece 58" onclick="openModal();currentSlide(58)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (59).jpg" alt="Art piece 59" onclick="openModal();currentSlide(59)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (60).jpg" alt="Art piece 60" onclick="openModal();currentSlide(60)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (61).jpg" alt="Art piece 61" onclick="openModal();currentSlide(61)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (62).jpg" alt="Art piece 62" onclick="openModal();currentSlide(62)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (63).jpg" alt="Art piece 63" onclick="openModal();currentSlide(63)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (64).jpg" alt="Art piece 64" onclick="openModal();currentSlide(64)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (65).jpg" alt="Art piece 65" onclick="openModal();currentSlide(65)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (66).jpg" alt="Art piece 66" onclick="openModal();currentSlide(66)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (67).jpg" alt="Art piece 67" onclick="openModal();currentSlide(67)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (68).jpg" alt="Art piece 68" onclick="openModal();currentSlide(68)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (69).jpg" alt="Art piece 69" onclick="openModal();currentSlide(69)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (70).jpg" alt="Art piece 70" onclick="openModal();currentSlide(70)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (71).jpg" alt="Art piece 71" onclick="openModal();currentSlide(71)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (72).jpg" alt="Art piece 72" onclick="openModal();currentSlide(72)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (73).jpg" alt="Art piece 73" onclick="openModal();currentSlide(73)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (74).jpg" alt="Art piece 74" onclick="openModal();currentSlide(74)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (75).jpg" alt="Art piece 75" onclick="openModal();currentSlide(75)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (76).jpg" alt="Art piece 76" onclick="openModal();currentSlide(76)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (77).jpg" alt="Art piece 77" onclick="openModal();currentSlide(77)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (78).jpg" alt="Art piece 78" onclick="openModal();currentSlide(78)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (79).jpg" alt="Art piece 79" onclick="openModal();currentSlide(79)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (80).jpg" alt="Art piece 80" onclick="openModal();currentSlide(80)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (81).jpg" alt="Art piece 81" onclick="openModal();currentSlide(81)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (82).jpg" alt="Art piece 82" onclick="openModal();currentSlide(82)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (83).jpg" alt="Art piece 83" onclick="openModal();currentSlide(83)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (84).jpg" alt="Art piece 84" onclick="openModal();currentSlide(84)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (85).jpg" alt="Art piece 85" onclick="openModal();currentSlide(85)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (86).jpg" alt="Art piece 86" onclick="openModal();currentSlide(86)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (87).jpg" alt="Art piece 87" onclick="openModal();currentSlide(87)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (88).jpg" alt="Art piece 88" onclick="openModal();currentSlide(88)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (89).jpg" alt="Art piece 89" onclick="openModal();currentSlide(89)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (90).jpg" alt="Art piece 90" onclick="openModal();currentSlide(90)"></div>
+            <div class="gallery-item"><img src="imgpotatos/potatos (91).jpg" alt="Art piece 91" onclick="openModal();currentSlide(91)"></div>
+             
+            </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        <img class="modal-content" id="img01">
+    </div>
+
+    <script>
+        // 获取所有画廊图片
+        const images = document.querySelectorAll('.gallery-item img');
+        const modal = document.getElementById('myModal');
+        const modalImg = document.getElementById("img01");
+        let slideIndex = 0;
+
+        // 打开模态框
+        function openModal() {
+            modal.style.display = "flex"; // 使用flex居中
+            document.body.style.overflow = "hidden"; // 禁止背景滚动
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            modal.style.display = "none";
+            document.body.style.overflow = "auto"; // 恢复背景滚动
+        }
+
+        // 指定显示第n张图
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+
+        // 切换上一张/下一张
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        // 核心显示逻辑
+        function showSlides(n) {
+            if (n > images.length) {slideIndex = 1}
+            if (n < 1) {slideIndex = images.length}
+            
+            // 获取当前应该显示的图片源 (src)
+            // 注意：这里假设 images 数组是从 0 开始，但传入的 n 是从 1 开始，所以要减 1
+            let targetImg = images[slideIndex - 1];
+            modalImg.src = targetImg.src;
+        }
+
+        // 点击模态框背景也可以关闭
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // 键盘支持 (ESC关闭, 左右键切换)
+        document.addEventListener('keydown', function(e) {
+            if (modal.style.display === "flex") {
+                if (e.key === "Escape") {
+                    closeModal();
+                } else if (e.key === "ArrowLeft") {
+                    plusSlides(-1);
+                } else if (e.key === "ArrowRight") {
+                    plusSlides(1);
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

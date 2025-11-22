@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Butcher the butcher - AnyJackson</title>
+    <link rel="stylesheet" href="sentient.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="potato.ico">
+    
+    <style>
+        /* === 基础样式 === */
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh; 
+            overflow-x: hidden;
+            color: black; 
+            
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), 
+                url('design/AtB-Image.jpg'); 
+            background-attachment: fixed; 
+            background-size: cover;       
+            background-position: center center;
+            background-repeat: no-repeat;
+            
+            padding-top: 240px;
+        }
+
+        /* === 导航栏 === */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px 0;
+            z-index: 2000;
+            background-color: rgba(255, 255, 255, 0.6); 
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: black;
+            font-size: 1rem;
+            text-transform: lowercase;
+            letter-spacing: 1px;
+            margin: 0 45px;
+            font-weight: normal;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: black;
+            transition: width 0.3s ease;
+        }
+
+        .navbar a:hover::after,
+        .navbar a.active::after {
+            width: 100%;
+        }
+
+        /* === 核心区域 === */
+        .stack-wrapper {
+            width: 100%;
+            min-height: 80vh;
+            padding-bottom: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            margin-bottom: 60px;
+            text-align: center;
+            text-shadow: 0 0 15px rgba(255,255,255,1);
+        }
+
+        /* --- Flex 容器：制造重叠布局 --- */
+        .photo-stack {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center; 
+            width: 90%; 
+            max-width: 1100px; 
+            margin: 0 auto; 
+            padding: 40px; 
+        }
+
+        /* --- 单张照片样式 --- */
+        .photo-card {
+            position: relative;
+            /* 基础宽度 */
+            flex: 0 0 260px; 
+            height: auto;
+            
+            /* 负边距制造重叠 */
+            margin: -20px; 
+            
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), z-index 0s; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+            cursor: pointer;
+            filter: grayscale(80%);
+            
+            /* === 修改点：移除了 border-radius，确保直角 === */
+            background: #fff; 
+            z-index: 1; 
+        }
+
+        .photo-card img {
+            display: block;
+            width: 100%;
+            height: 200px; 
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        /* === 悬停或激活状态 === */
+        .photo-card:hover,
+        .photo-card.active {
+            z-index: 1000; /* 提到最前 */
+            transform: scale(1.25); /* 放大 */
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4); 
+            filter: grayscale(0%);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 767px) {
+            .photo-stack {
+                width: 100%;
+                padding: 20px;
+            }
+            .photo-card {
+                flex: 0 0 160px; 
+                margin: -10px; 
+            }
+            .photo-card img {
+                height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index_homepage.html">home</a>
+        <a href="in-their-mouths.html">In their mouths</a>
+        <a href="humboldt-potatos.html">Humboldt potatos</a>
+        <a href="inside-the-butcher.html" class="active">Butcher the butcher</a>
+        <a href="hometown.html">goarwywasyt</a>
+    </nav>
+
+    <div class="stack-wrapper" style="margin-bottom: 30px;">
+        <h1 class="page-title">Butcher the Butcher</h1>
+
+        <div class="photo-stack">
+            <div class="photo-card"><img src="imgbutcher/photo (1).jpg" alt="Scene 1"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (2).jpg" alt="Scene 2"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (3).jpg" alt="Scene 3"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (4).jpg" alt="Scene 4"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (5).jpg" alt="Scene 5"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (6).jpg" alt="Scene 6"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (7).jpg" alt="Scene 7"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (8).jpg" alt="Scene 8"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (9).jpg" alt="Scene 9"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (10).jpg" alt="Scene 10"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (11).jpg" alt="Scene 11"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (12).jpg" alt="Scene 12"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (13).jpg" alt="Scene 13"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (14).jpg" alt="Scene 14"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (15).jpg" alt="Scene 15"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (16).jpg" alt="Scene 16"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (17).jpg" alt="Scene 17"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (18).jpg" alt="Scene 18"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (19).jpg" alt="Scene 19"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (20).jpg" alt="Scene 20"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (21).jpg" alt="Scene 21"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (22).jpg" alt="Scene 22"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (23).jpg" alt="Scene 23"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (24).jpg" alt="Scene 24"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (25).jpg" alt="Scene 25"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (26).jpg" alt="Scene 26"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (27).jpg" alt="Scene 27"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (28).jpg" alt="Scene 28"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (29).jpg" alt="Scene 29"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (30).jpg" alt="Scene 30"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (31).jpg" alt="Scene 31"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (32).jpg" alt="Scene 32"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (33).jpg" alt="Scene 33"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (34).jpg" alt="Scene 34"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (35).jpg" alt="Scene 35"></div>
+            <div class="photo-card"><img src="imgbutcher/photo (36).jpg" alt="Scene 36"></div>
+        </div>
+        
+        <p style="margin-top: 50px; color: #666; font-size: 0.9rem;">(Shuffle through the memories)</p>
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.photo-card');
+        cards.forEach(card => {
+            card.addEventListener('click', function(e) {
+                e.stopPropagation();
+                cards.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        document.addEventListener('click', () => {
+            cards.forEach(c => c.classList.remove('active'));
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnyJackson</title>
+    <meta name="description" content="Any Jackson Chaturanga presents">
+    <meta name="title" content="Habla con la papa en la boca.">
+    <link rel="stylesheet" href="sentient.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="potato.ico">
+    
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh; 
+            overflow-x: hidden;
+            color: black; 
+
+            /* 背景设置：半透明白色遮罩 + 背景图 */
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), 
+                url('design/AtB-Image.jpg'); 
+            
+            background-attachment: fixed; 
+            background-size: cover;       
+            background-position: center center;
+            background-repeat: no-repeat;
+            
+            padding-top: 240px;
+        }
+
+        /* === 导航栏样式 === */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px 0;
+            z-index: 1000;
+            
+            background-color: rgba(255, 255, 255, 0.6); 
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: black;
+            font-size: 1rem;
+            text-transform: lowercase;
+            letter-spacing: 1px;
+            margin: 0 45px; /* 较宽的间距 */
+            font-weight: normal;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .navbar a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: black;
+            transition: width 0.3s ease;
+        }
+
+        .navbar a:hover::after {
+            width: 100%;
+        }
+
+        /* === 正文容器 === */
+        .content-container {
+            width: min(90%, 800px);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px 0;
+            box-sizing: border-box;
+        }
+
+        .content-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); 
+            margin-bottom: 30px;
+        }
+
+        .text-block {
+            font-size: 1rem;
+            white-space: pre-line;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        h1.main-title {
+            font-size: 40px;
+            margin: 10px 0 30px 0;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 1);
+        }
+
+        /* === 响应式调整 === */
+        @media (max-width: 767px) {  
+            .navbar {
+                flex-wrap: wrap;
+                padding: 15px 0;
+            }
+            .navbar a {
+                font-size: 0.75rem;
+                margin: 5px 12px; 
+            }
+            .content-container {
+                width: 94%;
+            }
+            h1.main-title {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index_homepage.html">home</a>
+        <a href="in-their-mouths.html">In their mouths</a>
+        <a href="humboldt-potatos.html">Humboldt potatos</a>
+        <a href="inside-the-butcher.html">Butcher the butcher</a>
+        <a href="hometown.html">goarwywasyt</a>
+    </nav>
+
+    <div class="content-container">
+        <p class="text-block"></p>
+    </div>
+
+    <div class="content-container">
+        <p class="text-block"></p>
+    </div>
+
+    <div class="content-container">
+        <p class="text-block"></p>
+    </div>
+
+    <div class="content-container">
+        <p class="text-block"></p>
+    </div>
+
+    <div class="content-container">
+        <p class="text-block"></p>
+    </div>
+
+    <div class="content-container">
+        <p class="text-block"></p>
+    </div>
+
+    <div class="content-container">
+        <p class="text-block"></p>
+    </div>
+
+    <div class="content-container">
+        <p class="text-block"></p>
+    </div>
+    
+    <div class="content-container">
+        <p class="text-block"></p>
+    </div>
+
+    <div class="content-container">
+        <p class="text-block"></p>
+    </div>
+
+
+
+
+    <div style="height: 50px;"></div>
+</body>
+</html>
