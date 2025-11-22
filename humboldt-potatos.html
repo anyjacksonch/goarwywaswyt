@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Humboldt Potatos - AnyJackson</title>
-    <link rel="stylesheet" href="sentient.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="potato.ico">
     
     <style>
         /* === 继承自首页的基础样式 === */
         body {
-            font-family: sans-serif;
+            font-family: 'Proxima Nova', 'Montserrat', sans-serif;
             margin: 0;
             padding: 0;
             min-height: 100vh; 
@@ -28,6 +28,34 @@
             background-repeat: no-repeat;
             
             padding-top: 240px; 
+        }
+
+        .regular-text {
+            font-family: 'Proxima Nova', sans-serif;
+            font-weight: normal; /* 对应 Regular (400) */
+        }
+
+        .medium-text {
+            font-family: 'Proxima Nova', sans-serif;
+            font-weight: 500; /* 对应 Medium */
+            font-style: normal;
+        }
+
+        .bold-text {
+            font-family: 'Proxima Nova', sans-serif;
+            font-weight: bold; /* 对应 Bold (700) */
+        }
+
+        .italic-text {
+            font-family: 'Proxima Nova', sans-serif;
+            font-style: italic;
+            font-weight: normal;
+        }
+
+        .bold-italic-text {
+            font-family: 'Proxima Nova', sans-serif;
+            font-weight: bold;
+            font-style: italic;
         }
 
         /* === 导航栏样式 (保持不变) === */
@@ -223,7 +251,7 @@
 <body>
 
     <nav class="navbar">
-        <a href="index_homepage.html">home</a>
+        <a href="index.html">home</a>
         <a href="in-their-mouths.html">In their mouths</a>
         <a href="humboldt-potatos.html" class="active">Humboldt potatos</a> <a href="inside-the-butcher.html">Butcher the butcher</a>
         <a href="hometown.html">goarwywasyt</a>
